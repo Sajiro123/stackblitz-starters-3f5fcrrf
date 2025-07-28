@@ -1,0 +1,14 @@
+<div class="tab-navigation-container">
+  <div class="tab-navigation">
+    <button 
+      *ngFor="let category of categories"
+      class="tab-button"
+      [class.active]="activeTab === category.id"
+      [style.--category-color]="category.color"
+      (click)="onTabClick(category.id)"
+    >
+      <span class="tab-icon">{{ category.icon }}</span>
+      <span class="tab-text">{{ category.label }}</span>
+    </button>
+  </div>
+</div>

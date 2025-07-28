@@ -1,0 +1,40 @@
+<div class="expense-list-container">
+  <div class="list-header">
+    <h3>{{ titleText }}</h3>
+    <div class="total-amount" [style.background]="getCategoryConfig().color">
+      Total: S/ {{ totalAmount.toFixed(2) }}
+    </div>
+  </div>
+
+  <div class="expenses-container" *ngIf="expenses.length > 0; else noExpenses">
+    <div class="expense-card" *ngFor="let expense of expenses; trackBy: trackByFn">
+      <div class="expense-header">
+        <div class="expense-type-icon">
+          {{ categoryIcon }}
+        </div>
+        <div class="expense-price">
+          S/ {{ expense.precio.toFixed(2) }}
+        </div>
+        <button class="delete-btn" (click)="onDelete(expense.id)">
+          🗑️
+        </button>
+      </div>
+      
+      <div class="expense-body">
+        <h4 class="expense-description">{{ expense.descripcion }}</h4>
+        <p class="expense-notes" *ngIf="expense.notas">{{ expense.notas }}</p>
+        <div class="expense-date">{{ formatDate(expense.fecha) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noExpenses>
+    <div class="no-expenses">
+      <div class="no-expenses-icon">
+        {{ categoryIcon }}
+      </div>
+      <p>No hay gastos registrados en {{ getCategoryConfig().label }}</p>
+      <small>Los gastos que registres aparecerán aquí</small>
+    </div>
+  </ng-template>
+</div>

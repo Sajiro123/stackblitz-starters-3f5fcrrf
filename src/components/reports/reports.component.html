@@ -1,0 +1,96 @@
+<div class="reports-container">
+  <div class="reports-header">
+    <h2>📊 Reportes de Gastos</h2>
+    <div class="summary-cards">
+      <div class="summary-card total">
+        <div class="card-icon">💰</div>
+        <div class="card-content">
+          <div class="card-value">S/ {{ totalAmount.toFixed(2) }}</div>
+          <div class="card-label">Total Gastado</div>
+        </div>
+      </div>
+      <div class="summary-card count">
+        <div class="card-icon">📝</div>
+        <div class="card-content">
+   <!--    <div class="card-value">{{ totalExpenses }}</div>-->
+          <div class="card-label">Total Gastos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reports-content" *ngIf="expenses.length > 0; else noData">
+    <!-- Resumen por Categorías -->
+    <div class="report-section">
+      <h3>📈 Gastos por Categoría</h3>
+      <div class="category-list">
+        <div class="category-item" *ngFor="let summary of categorySummaries">
+          <div class="category-header">
+            <div class="category-info">
+              <span class="category-icon">{{ summary.config.icon }}</span>
+              <span class="category-name">{{ summary.config.label }}</span>
+            </div>
+            <div class="category-amount" [style.color]="summary.config.color">
+              S/ {{ summary.total.toFixed(2) }}
+            </div>
+          </div>
+          <div class="category-details">
+            <div class="progress-bar">
+              <div class="progress-fill" 
+                   [style.width.%]="getPercentage(summary.total)"
+                   [style.background]="summary.config.color">
+              </div>
+            </div>
+            <div class="category-stats">
+              <span>{{ summary.count }} gastos</span>
+              <span>{{ getPercentage(summary.total).toFixed(1) }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen por Fechas -->
+    <div class="report-section">
+      <h3>📅 Gastos por Fecha</h3>
+      <div class="date-list">
+        <div class="date-item" *ngFor="let summary of dateSummaries">
+          <div class="date-header">
+            <div class="date-info">
+              <span class="date-icon">📅</span>
+              <span class="date-value">{{ summary.date }}</span>
+            </div>
+            <div class="date-amount">
+              S/ {{ summary.total.toFixed(2) }}
+            </div>
+          </div>
+          <div class="date-details">
+            <div class="date-stats">
+              <span>{{ summary.count }} gastos registrados</span>
+            </div>
+            <div class="expense-preview">
+              <div class="expense-item" *ngFor="let expense of summary.expenses.slice(0, 3)">
+                <span class="expense-category">
+                  {{ categories.find(c => c.id === expense.tipoGasto)?.icon }}
+                </span>
+                <span class="expense-desc">{{ expense.descripcion }}</span>
+                <span class="expense-amount">S/ {{ expense.precio.toFixed(2) }}</span>
+              </div>
+              <div class="more-expenses" *ngIf="summary.expenses.length > 3">
+                +{{ summary.expenses.length - 3 }} más...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <div class="no-data">
+      <div class="no-data-icon">📊</div>
+      <p>No hay datos para mostrar</p>
+      <small>Los reportes aparecerán cuando registres gastos</small>
+    </div>
+  </ng-template>
+</div>

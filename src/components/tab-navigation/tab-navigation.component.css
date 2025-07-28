@@ -1,0 +1,131 @@
+.tab-navigation-container {
+  margin: 15px auto;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0 10px;
+}
+
+.tab-navigation {
+  display: flex;
+  gap: 8px;
+  background: white;
+  border-radius: 20px;
+  padding: 6px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  min-width: max-content;
+  position: sticky;
+  top: 20px;
+  z-index: 100;
+  overflow-x: auto;
+}
+
+.tab-button {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  min-width: 70px;
+  border: none;
+  border-radius: 15px;
+  background: transparent;
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: #333;
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  color: white;
+  background: var(--category-color);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tab-icon {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.tab-button.active .tab-icon {
+  transform: scale(1.1);
+}
+
+.tab-text {
+  font-weight: 500;
+  font-size: 10px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tab-navigation-container {
+    margin: 10px 5px;
+    padding: 0 5px;
+  }
+
+  .tab-button {
+    padding: 6px 8px;
+    min-width: 60px;
+  }
+
+  .tab-icon {
+    font-size: 16px;
+  }
+
+  .tab-text {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-navigation-container {
+    margin: 8px 2px;
+    padding: 4px;
+  }
+
+  .tab-button {
+    padding: 5px 6px;
+    min-width: 55px;
+    gap: 2px;
+  }
+
+  .tab-icon {
+    font-size: 14px;
+  }
+
+  .tab-text {
+    font-size: 8px;
+  }
+}
+
+/* Scrollbar para navegación horizontal */
+.tab-navigation-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tab-navigation-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tab-navigation-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.tab-navigation::-webkit-scrollbar {
+  display: none;
+}

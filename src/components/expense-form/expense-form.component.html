@@ -1,0 +1,83 @@
+<div class="expense-form-container" [style.--category-color]="categoryColor">
+  <div class="form-header">
+    <div class="icon-container">
+      <div class="category-icon">{{ categoryIcon }}</div>
+    </div>
+    <h2>{{ titleText }}</h2>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" class="expense-form">
+    <div class="form-group">
+      <label for="precio">Precio *</label>
+      <div class="input-container">
+        <span class="currency">S/</span>
+        <input
+          type="number"
+          id="precio"
+          [(ngModel)]="form.precio"
+          name="precio"
+          placeholder="0.00"
+          step="0.01"
+          min="0"
+          required
+          class="price-input"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción *</label>
+      <input
+        type="text"
+        id="descripcion"
+        [(ngModel)]="form.descripcion"
+        name="descripcion"
+        placeholder="Ej: Descripción del producto..."
+        required
+        class="text-input"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="notas">Notas adicionales</label>
+      <textarea
+        id="notas"
+        [(ngModel)]="form.notas"
+        name="notas"
+        placeholder="Información adicional (opcional)"
+        rows="3"
+        class="textarea-input"
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="fecha">Fecha *</label>
+      <input
+        type="date"
+        id="fecha"
+        [(ngModel)]="form.fecha"
+        name="fecha"
+        required
+        class="date-input"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Tipo de gasto</label>
+      <div class="type-display">
+        <span class="type-badge">
+          {{ categoryIcon }} {{ getCategoryConfig().label }}
+        </span>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="submit-btn"
+      [disabled]="!form.precio || !form.descripcion.trim()"
+    >
+      <span class="btn-icon">💾</span>
+      Registrar Gasto
+    </button>
+  </form>
+</div>
