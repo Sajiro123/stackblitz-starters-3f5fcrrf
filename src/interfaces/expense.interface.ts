@@ -12,7 +12,7 @@ export interface ExpenseForm {
   descripcion: string;
   notas: string;
   tipoGasto: 'pescados' | 'mariscos' | 'abarrotes' | 'verduras' | 'carnes' | 'lacteos' | 'bebidas' | 'panaderia' | 'limpieza' | 'otros';
-  // fecha: Date;
+  fecha: Date;
 }
 
 export interface ValidatedExpenseForm {
