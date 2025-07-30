@@ -16,6 +16,7 @@ export class ExpenseService {
   }
 
   addExpense(expense: Omit<Expense, 'id' | 'fecha'>): void {
+    debugger;
     const newExpense: Expense = {
       ...expense,
       id: this.generateId(),

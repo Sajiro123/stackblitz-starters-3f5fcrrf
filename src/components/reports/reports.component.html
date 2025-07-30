@@ -71,7 +71,7 @@
             <div class="expense-preview">
               <div class="expense-item" *ngFor="let expense of summary.expenses.slice(0, 3)">
                 <span class="expense-category">
-                  {{ categories.find(c => c.id === expense.tipoGasto)?.icon }}
+                  {{ getCategoryIcon(expense.tipoGasto) }}
                 </span>
                 <span class="expense-desc">{{ expense.descripcion }}</span>
                 <span class="expense-amount">S/ {{ expense.precio.toFixed(2) }}</span>

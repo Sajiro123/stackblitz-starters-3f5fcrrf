@@ -200,6 +200,7 @@ export class App {
   }
 
   onExpenseAdded(expenseForm: ValidatedExpenseForm) {
+    debugger;
     this.expenseService.addExpense(expenseForm);
   }
 
