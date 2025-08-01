@@ -1,39 +1,62 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Expense } from '../interfaces/expense.interface';
+import { Injectable } from "@angular/core";
+import { Expense } from "../interfaces/expense.interface";
+import { BehaviorSubject, Observable, switchMap } from "rxjs";
+import { HttpClient } from "@angular/common/http"; // Importa HttpClient
+import { Router } from "@angular/router";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: "root" })
 export class ExpenseService {
   private expenses: Expense[] = [];
   private expensesSubject = new BehaviorSubject<Expense[]>([]);
-  
+  private apiUrl = "http://localhost:3000/post";
+
   expenses$ = this.expensesSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.loadExpenses();
   }
 
-  addExpense(expense: Omit<Expense, 'id' | 'fecha'>): void {
+  addExpense(expense: Omit<Expense, "id" | "fecha">): void {
     debugger;
     const newExpense: Expense = {
       ...expense,
       id: this.generateId(),
-      fecha: new Date()
+      fecha: new Date(),
     };
-    
+
     this.expenses.push(newExpense);
     this.saveExpenses();
     this.expensesSubject.next([...this.expenses]);
   }
 
-  getExpensesByType(tipo: 'pescados' | 'mariscos'): Expense[] {
-    return this.expenses.filter(expense => expense.tipoGasto === tipo);
+  insertGasto(Expense: Expense): Observable<any> {
+    const insertQuery = `
+      INSERT INTO "GastosCompras" (
+        created_at,
+        descripcion,
+        precio,
+        tipo,
+        notas,
+        fecha
+      ) VALUES (
+        CURRENT_TIMESTAMP,
+        '${Expense.descripcion}',
+        ${Expense.precio},
+        '${Expense.tipoGasto}',
+        '${Expense.notas}',
+        CURRENT_DATE
+      );
+    `;
+
+    return this.http.post(this.apiUrl, { query: insertQuery });
+  }
+
+  getExpensesByType(tipo: "pescados" | "mariscos"): Expense[] {
+    return this.expenses.filter((expense) => expense.tipoGasto === tipo);
   }
 
   deleteExpense(id: string): void {
-    this.expenses = this.expenses.filter(expense => expense.id !== id);
+    this.expenses = this.expenses.filter((expense) => expense.id !== id);
     this.saveExpenses();
     this.expensesSubject.next([...this.expenses]);
   }
@@ -43,11 +66,11 @@ export class ExpenseService {
   }
 
   private saveExpenses(): void {
-    localStorage.setItem('expenses', JSON.stringify(this.expenses));
+    localStorage.setItem("expenses", JSON.stringify(this.expenses));
   }
 
   private loadExpenses(): void {
-    const stored = localStorage.getItem('expenses');
+    const stored = localStorage.getItem("expenses");
     if (stored) {
       this.expenses = JSON.parse(stored);
       this.expensesSubject.next([...this.expenses]);
