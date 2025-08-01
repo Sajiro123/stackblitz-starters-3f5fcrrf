@@ -9,6 +9,7 @@ import {
   ExpenseCategory,
   CategoryConfig,
 } from "../tab-navigation/tab-navigation.component";
+import { ExpenseService } from "../../services/expense.service";
 
 @Component({
   selector: "app-expense-form",
@@ -21,6 +22,7 @@ export class ExpenseFormComponent {
   @Input() tipoGasto: ExpenseCategory = "pescados";
   @Output() expenseAdded = new EventEmitter<ValidatedExpenseForm>();
 
+  constructor(private service: ExpenseService) {}
   form: ExpenseForm = {
     precio: null,
     descripcion: "",
@@ -31,7 +33,9 @@ export class ExpenseFormComponent {
 
   // Store the date as a string for the date input
   get dateString(): string {
-    return this.form.fecha ? this.form.fecha.toISOString().substring(0, 10) : "";
+    return this.form.fecha
+      ? this.form.fecha.toISOString().substring(0, 10)
+      : "";
   }
 
   set dateString(value: string) {
@@ -64,13 +68,22 @@ export class ExpenseFormComponent {
   }
 
   onSubmit() {
+    debugger;
     if (this.isFormValid()) {
-      debugger;
-      this.expenseAdded.emit({
-        ...this.form,
-        precio: this.form.precio!,
-        fecha: this.form.fecha,
-      });
+      this.service
+        .insertGasto({
+          ...this.form,
+          precio: this.form.precio!,
+          fecha: this.form.fecha,
+        })
+        .subscribe({
+          next: (response) => {
+            console.log("Gasto insertado correctamente", response);
+          },
+          error: (error) => {
+            console.error("Error al insertar gasto:", error);
+          },
+        });
       this.resetForm();
     }
   }
