@@ -193,8 +193,9 @@ export class App {
   expenses: Expense[] = [];
 
   constructor(private expenseService: ExpenseService) {
-    this.expenseService.expenses$.subscribe((expenses) => {
-      this.expenses = expenses;
+    this.expenseService.ListarGastosHoy().subscribe((expenses) => {
+      debugger;
+      this.expenses = expenses.data;
     });
   }
 
@@ -213,9 +214,7 @@ export class App {
   }
 
   getExpensesByType(): Expense[] {
-    return this.expenses.filter(
-      (expense) => expense.tipoGasto === this.activeTab
-    );
+    return this.expenses.filter((expense) => expense.tipo === this.activeTab);
   }
 }
 

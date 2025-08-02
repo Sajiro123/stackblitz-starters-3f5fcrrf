@@ -76,7 +76,7 @@ export class ReportsComponent {
 
     this.categories.forEach((category) => {
       const categoryExpenses = this.expenses.filter(
-        (expense) => expense.tipoGasto === category.id
+        (expense) => expense.tipo === category.id
       );
       if (categoryExpenses.length > 0) {
         summaries.push({
@@ -96,7 +96,6 @@ export class ReportsComponent {
   }
 
   get dateSummaries(): DateSummary[] {
-    
     const dateMap = new Map<string, Expense[]>();
 
     this.expenses.forEach((expense) => {

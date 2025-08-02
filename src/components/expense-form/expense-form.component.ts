@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import {
@@ -8,6 +14,7 @@ import {
 import {
   ExpenseCategory,
   CategoryConfig,
+  TabNavigationComponent,
 } from "../tab-navigation/tab-navigation.component";
 import { ExpenseService } from "../../services/expense.service";
 
@@ -19,15 +26,23 @@ import { ExpenseService } from "../../services/expense.service";
   styleUrls: ["./expense-form.component.css"],
 })
 export class ExpenseFormComponent {
+  @ViewChild(TabNavigationComponent) tabNavigation?: TabNavigationComponent;
+  // @Output() expenseAdded = new EventEmitter<ValidatedExpenseForm>();
+
   @Input() tipoGasto: ExpenseCategory = "pescados";
   @Output() expenseAdded = new EventEmitter<ValidatedExpenseForm>();
+  static categoria: any;
 
-  constructor(private service: ExpenseService) {}
+  constructor(private service: ExpenseService) {
+    this.form.tipo = this.tipoGasto;
+    this.form.fecha = this.getFechaPeru();
+  }
+
   form: ExpenseForm = {
     precio: null,
     descripcion: "",
     notas: "",
-    tipoGasto: "pescados",
+    tipo: "pescados",
     fecha: new Date(),
   };
 
@@ -39,7 +54,7 @@ export class ExpenseFormComponent {
   }
 
   set dateString(value: string) {
-    this.form.fecha = value ? new Date(value) : new Date();
+    this.form.fecha = value ? this.getFechaPeru() : this.getFechaPeru();
   }
 
   categories: CategoryConfig[] = [
@@ -63,8 +78,16 @@ export class ExpenseFormComponent {
   ];
 
   ngOnInit() {
-    this.form.tipoGasto = this.tipoGasto;
-    this.form.fecha = new Date();
+    debugger;
+    this.form.tipo = this.tipoGasto;
+    this.form.fecha = this.getFechaPeru();
+  }
+
+  getFechaPeru(): Date {
+    const ahora = new Date();
+    const offsetPeru = -5; // Perú está en UTC-5
+    const horaPeru = ahora.getTime() + offsetPeru * 60 * 60 * 1000;
+    return new Date(horaPeru);
   }
 
   onSubmit() {
@@ -75,16 +98,24 @@ export class ExpenseFormComponent {
           ...this.form,
           precio: this.form.precio!,
           fecha: this.form.fecha,
+          tipo: ExpenseFormComponent.categoria,
         })
         .subscribe({
           next: (response) => {
             console.log("Gasto insertado correctamente", response);
+            alert("✅ Gasto registrado exitosamente");
+            this.resetForm();
           },
           error: (error) => {
             console.error("Error al insertar gasto:", error);
+            alert(
+              "❌ Error al registrar el gasto. Por favor, intente nuevamente."
+            );
           },
         });
       this.resetForm();
+    } else {
+      alert("⚠️ Por favor complete todos los campos requeridos correctamente");
     }
   }
 
@@ -101,8 +132,8 @@ export class ExpenseFormComponent {
       precio: null,
       descripcion: "",
       notas: "",
-      tipoGasto: this.tipoGasto,
-      fecha: new Date(),
+      tipo: this.tipoGasto,
+      fecha: this.getFechaPeru(),
     };
   }
 

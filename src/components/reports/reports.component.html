@@ -12,7 +12,7 @@
       <div class="summary-card count">
         <div class="card-icon">📝</div>
         <div class="card-content">
-      <div class="card-value">{{ totalExpenses }}</div>
+          <div class="card-value">{{ totalExpenses }}</div>
           <div class="card-label">Total Gastos</div>
         </div>
       </div>
@@ -36,9 +36,8 @@
           </div>
           <div class="category-details">
             <div class="progress-bar">
-              <div class="progress-fill" 
-                   [style.width.%]="getPercentage(summary.total)"
-                   [style.background]="summary.config.color">
+              <div class="progress-fill" [style.width.%]="getPercentage(summary.total)"
+                [style.background]="summary.config.color">
               </div>
             </div>
             <div class="category-stats">
@@ -71,7 +70,7 @@
             <div class="expense-preview">
               <div class="expense-item" *ngFor="let expense of summary.expenses.slice(0, 3)">
                 <span class="expense-category">
-                  {{ getCategoryIcon(expense.tipoGasto) }}
+                  {{ getCategoryIcon(expense.tipo) }}
                 </span>
                 <span class="expense-desc">{{ expense.descripcion }}</span>
                 <span class="expense-amount">S/ {{ expense.precio.toFixed(2) }}</span>

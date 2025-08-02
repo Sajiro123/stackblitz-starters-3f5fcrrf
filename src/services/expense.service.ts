@@ -10,10 +10,15 @@ export class ExpenseService {
   private expensesSubject = new BehaviorSubject<Expense[]>([]);
   private apiUrl = "http://localhost:3000/post";
 
-  expenses$ = this.expensesSubject.asObservable();
+  // expenses$ = this.expensesSubject.asObservable();
 
   constructor(private http: HttpClient) {
     this.loadExpenses();
+  }
+
+  ListarGastosHoy() {
+    const query = `SELECT * FROM "GastosCompras" WHERE fecha=CURRENT_DATE AND deleted IS null;`;
+    return this.http.post<any>(this.apiUrl, { query });
   }
 
   addExpense(expense: Omit<Expense, "id" | "fecha">): void {
@@ -30,6 +35,11 @@ export class ExpenseService {
   }
 
   insertGasto(Expense: Expense): Observable<any> {
+    debugger;
+    const fechaOriginal = new Date(Expense.fecha);
+    // Luego formatea a ISO string (PostgreSQL lo entenderá automáticamente)
+    const fechaParaPostgres = fechaOriginal.toISOString();
+
     const insertQuery = `
       INSERT INTO "GastosCompras" (
         created_at,
@@ -42,9 +52,9 @@ export class ExpenseService {
         CURRENT_TIMESTAMP,
         '${Expense.descripcion}',
         ${Expense.precio},
-        '${Expense.tipoGasto}',
+        '${Expense.tipo}',
         '${Expense.notas}',
-        CURRENT_DATE
+        '${fechaParaPostgres}'
       );
     `;
 
@@ -52,7 +62,7 @@ export class ExpenseService {
   }
 
   getExpensesByType(tipo: "pescados" | "mariscos"): Expense[] {
-    return this.expenses.filter((expense) => expense.tipoGasto === tipo);
+    return this.expenses.filter((expense) => expense.tipo === tipo);
   }
 
   deleteExpense(id: string): void {
